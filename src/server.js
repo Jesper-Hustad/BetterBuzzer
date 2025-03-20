@@ -7,7 +7,7 @@ const Server = require('boardgame.io/server').Server;
 const Buzzer = require('./lib/store').Buzzer;
 const server = Server({ games: [Buzzer], generateCredentials: () => uuidv4() });
 
-const PORT = 80;
+const PORT = 4001;
 // const PORT = process.env.PORT || 4001;
 const { app } = server;
 

@@ -19,11 +19,7 @@ COPY . .
 RUN yarn build
 
 # Expose port 80
-EXPOSE 80
-
-# Run the application with sudo
-# Note: We need to install sudo first
-RUN apt-get update && apt-get install -y sudo
+EXPOSE 4001
 
 # Command to run the application
-CMD ["sudo", "yarn", "start"]
+CMD ["yarn", "start"]
