@@ -1,8 +1,16 @@
 import React from 'react';
+import {useState, useEffect} from 'react'
 import { Navbar } from 'react-bootstrap';
 import { isNil } from 'lodash';
 import { useHistory } from 'react-router';
 import { leaveRoom } from '../lib/endpoints';
+
+
+function getSimpleFilename(path) {
+  return path.split('/')[2].split('.')[0]
+  // return path.split('/').pop().split('.').first();
+}
+
 
 function Logo({ size = 25 }) {
   return (
@@ -21,13 +29,50 @@ function Logo({ size = 25 }) {
   );
 }
 
+
 export default function Header({
   auth = {},
   clearAuth,
   sound = null,
   setSound,
+  setSoundMapping,
+  soundMapping,
+  soundFiles,
+  players,
+  isHost,
 }) {
   const history = useHistory();
+  // const [a,b] = useState("a")
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const openModal = () => {
+    setIsModalOpen(true); // Show the modal
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
+  };
+
+  const handleSelectPlayer = (e) => {
+    setSelectedPlayer(e.target.value);
+  };
+
+  const handleSelectOption = (e) => {
+    setSelectedOption(e.target.value);
+  };
+
+  const handleSelectionChange = (playerID, event) => {
+    setSoundMapping({
+      ...soundMapping,
+      [playerID]: event.target.value
+    });
+
+    console.log("SET NEW VALUE FOR SOUND MAPPING", {
+      ...soundMapping,
+      [playerID]: event.target.value
+    })
+  };
 
   // leave current game
   async function leave() {
@@ -44,11 +89,44 @@ export default function Header({
 
   return (
     <header>
+      {isModalOpen && (
+        <div style={modalStyle}>
+          <div style={modalContentStyle}>
+            <h2>Set custom sound</h2>
+            {players.map((player) => {
+              return (
+                <label style={{ display: 'block' }}>
+                  {player.name}:
+                  <select onChange={(e) => handleSelectionChange(player.id, e)}>
+                    <option key={"000"} value={"ERROR"}>
+                      Select sound
+                    </option>
+                    {soundFiles.map((path) => (
+                      <option key={path} value={path}>
+                        {getSimpleFilename(path)}
+                      </option>
+                    ))}
+                  </select>
+                  <br />
+                </label>
+              );
+            })}
+            <br />
+            <button onClick={closeModal}>Close</button>
+          </div>
+        </div>
+      )}
+
       <Navbar>
         <Navbar.Brand>
           <Logo /> Multibuzzer
         </Navbar.Brand>
         <div className="nav-buttons">
+          {isHost ? (
+            <button className="text-button" onClick={openModal}>
+              Set sound
+            </button>
+          ) : null}
           {!isNil(sound) ? (
             <button className="text-button" onClick={() => setSound()}>
               {sound ? 'Turn off sound' : 'Turn on sound'}
@@ -64,3 +142,25 @@ export default function Header({
     </header>
   );
 }
+
+
+// Styles for the modal
+const modalStyle = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  // backgroundColor: '#454545',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 1000,
+};
+
+const modalContentStyle = {
+  backgroundColor:  '#424849',
+  padding: '20px',
+  borderRadius: '12px',
+  textAlign: 'center',
+};

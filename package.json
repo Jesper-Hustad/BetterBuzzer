@@ -8,6 +8,9 @@
     "node": "20.12.2"
   },
   "scripts": {
+    "prestart": "node scripts/generateSoundsJson.js",
+    "predev": "node scripts/generateSoundsJson.js",
+    "prebuild": "node scripts/generateSoundsJson.js",
     "start": "node -r esm src/server.js",
     "dev": "concurrently \"PORT=4000 yarn client\" \"PORT=4001 yarn start\"",
     "client": "react-scripts start",
