@@ -8,7 +8,7 @@ export function FooterSimple() {
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href="https://github.com/wsun/multibuzzer"
+        href="https://github.com/Jesper-Hustad/BetterBuzzer"
       >
         open source
       </a>
@@ -29,7 +29,7 @@ export default function Footer({ mobileOnly = false }) {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://github.com/wsun/multibuzzer"
+            href="https://github.com/Jesper-Hustad/BetterBuzzer"
           >
             open source
           </a>
