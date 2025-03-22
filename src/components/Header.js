@@ -119,7 +119,8 @@ export default function Header({
 
       <Navbar>
         <Navbar.Brand>
-          <Logo /> Multibuzzer
+          {/*<Logo />*/}
+          Game Night på helsfyr
         </Navbar.Brand>
         <div className="nav-buttons">
           {isHost ? (
@@ -127,7 +128,8 @@ export default function Header({
               Set sound
             </button>
           ) : null}
-          {!isNil(sound) ? (
+          {/* SHOULD REMOVE ISHOST CHECK HERE*/}
+          {!isNil(sound) && isHost ? (
             <button className="text-button" onClick={() => setSound()}>
               {sound ? 'Turn off sound' : 'Turn on sound'}
             </button>

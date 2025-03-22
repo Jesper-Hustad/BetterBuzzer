@@ -1,0 +1,238 @@
+/*body {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*    background-color: #333;*/
+/*    margin: 0;*/
+/*    font-family: Arial, sans-serif;*/
+/*}*/
+
+.category-text {
+    position: relative;
+    /*width: 450px;*/
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.metal-container {
+    position: relative;
+    /*width: 450px;*/
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* Outer metallic border - bright metal */
+.metal-container::before {
+    content: '';
+    position: absolute;
+    top: -10.8px;
+    left: -10.8px;
+    right: -10.8px;
+    bottom: -10.8px;
+    border-radius: 4.8px; /* Slightly larger radius for outer element */
+    background: linear-gradient(135deg,
+    #e0e0e0 0%,
+    #f0f0f0 10%,
+    #c0c0c0 20%,
+    #a0a0a0 30%,
+    #f0f0f0 40%,
+    #c0c0c0 50%,
+    #909090 60%,
+    #e0e0e0 70%,
+    #c0c0c0 80%,
+    #f0f0f0 90%,
+    #a0a0a0 100%);
+    z-index: 3;
+}
+
+div:has(.mode-lit)::before {
+    box-shadow:
+            0 0 3px 3px rgba(248, 194, 102, 0.3),
+            0 0 5.4px 5.4px rgba(248, 194, 102, 0.2),
+            0 0 9px 9px rgba(248, 194, 102, 0.14)
+}
+
+.mode-lit {
+    background:
+            url('https://i.imgur.com/hRty3mO.png'), /* Texture Image */
+            linear-gradient(to bottom, #929292, #3e3e3e); /* Gradient */
+
+    background-blend-mode: color-dodge; /* Blend the texture using color dodge */
+    background-size: 120px 120px, 100%; /* Fixed size for the image, full size for gradient */
+    /*background-repeat: repeat, no-repeat; !* Repeats the texture, not the gradient *!*/
+    z-index: 6;
+}
+
+.mode-normal {
+    background: linear-gradient(to bottom, #888, #444); /* Gradient */
+    z-index: 6;
+}
+
+.mode-normal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://i.imgur.com/hRty3mO.png'); /* Texture Image */
+    background-size: 120px 120px, 100%;
+    filter: brightness(0.4) grayscale(90%); /* Lower the brightness */
+    z-index: -1; /* Ensure it is behind the content */
+}
+
+/* Black separation line */
+.metal-container::after {
+    content: '';
+    position: absolute;
+    top: -5.4px;
+    left: -5.4px;
+    right: -5.4px;
+    bottom: -5.4px;
+    border-radius: 7.2px;
+    background: #000000;
+    z-index: 3;
+}
+
+/* Inner metallic border - darker metal */
+.metal-inner {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 6px;
+    background: linear-gradient(135deg,
+    #b0b0b0 0%,
+    #a0a0a0 15%,
+    #909090 30%,
+    #707070 45%,
+    #909090 60%,
+    #707070 75%,
+    #a0a0a0 90%,
+    #b0b0b0 100%);
+    z-index: 5;
+}
+
+.content {
+    position: absolute;
+    top: 4.8px;
+    left: 4.8px;
+    right: 4.8px;
+    bottom: 4.8px;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+}
+
+.mode-dark {
+    background: linear-gradient(to bottom, #333, #0e0e0e); /* Gradient */
+}
+
+.mode-dark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://i.imgur.com/hRty3mO.png'); /* Texture Image */
+    background-size: 120px 120px, 100%;
+    background-repeat: repeat;
+    filter: brightness(0.1); /* Lower the brightness to make the texture darker */
+    z-index: -1; /* Ensure it is behind the content */
+}
+
+.mode-dark h1 {
+    color: #555;
+}
+
+h1 {
+    margin: 0 0 0px 0;
+    font-size: 39px;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    color: white; /* Keeps the text visible */
+
+    /* Super thick black outline using multiple shadows */
+    text-shadow:
+            -2.4px -3.6px 9.6px #0000009e, 2.4px -3.6px 4.8px #0000009e,
+            -2.4px 3.6px 4.8px #0000009e, 2.4px 3.6px 4.8px #0000009e,
+            -2.4px 0px 4.8px #000000ab, 2.4px 0px 4.8px #0000009e,
+            0px 3.6px 4.8px #0000009e, 0px 7.2px 4.8px #0000009e
+}
+
+h2 {
+    margin: 0 0 0px 0;
+    font-size: 33px;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    color: #a5a5a5; /* Keeps the text visible */
+
+    /* Super thick black outline using multiple shadows */
+    text-shadow:
+            -2.4px -3.6px 9.6px #0000009e, 2.4px -3.6px 4.8px #0000009e,
+            -2.4px 3.6px 4.8px #0000009e, 2.4px 3.6px 4.8px #0000009e,
+            -2.4px 0px 4.8px #000000ab, 2.4px 0px 4.8px #0000009e,
+            0px 3.6px 4.8px #0000009e, 0px 7.2px 4.8px #0000009e
+}
+
+p {
+    margin: 0;
+    font-size: 9.6px;
+}
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 34.8px;
+    /*width: 80vw;*/
+    z-index: 1;
+}
+
+.styled-box {
+    border-radius: 18px; /* Adjust for rounded corners */
+    padding: 18.6px;
+    background-color: #000;
+    /* Create the layered border effect */
+    border: 5.4px solid #37424A; /* Bluish dark gray */
+    box-shadow:
+            0 0 0 3px black,      /* Black strip */
+            0 0 0 10.8px #ecba74,    /* Light yellow */
+            0 0 0 13.8px black,      /* Another black strip */
+            0 0 0 18.6px #757575;    /* Outer gray */
+    position: relative;
+    z-index: 0;
+}
+
+.overlay-div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5; /* Lower than button's z-index of 10 */
+    opacity: 0; /* Invisible */
+}
+
+.no-select {
+    user-select: none;
+}

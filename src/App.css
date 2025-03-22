@@ -18,7 +18,7 @@
 
 html,
 body {
-  background-color: var(--backgroundColor);
+  background: linear-gradient(to bottom, #272B32, #584A3B);
 }
 
 .App {
@@ -34,7 +34,7 @@ body {
 
 .App .primary {
   flex: 1;
-  background-color: var(--backgroundColor);
+  background: linear-gradient(to bottom, #272B32, #584A3B);
 }
 
 .App header nav {
@@ -259,7 +259,8 @@ body {
 }
 
 .App #room-title {
-  margin-bottom: 0px;
+  font-size: x-large;
+  margin-bottom: 50px;
 }
 
 .App .warning {

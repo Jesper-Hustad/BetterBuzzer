@@ -4,6 +4,7 @@ import { Howl } from 'howler';
 import { AiOutlineDisconnect } from 'react-icons/ai';
 import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
+import Scoreboard from '../scoreboard/scoreboard';
 
 export default function Table(game) {
   const [loaded, setLoaded] = useState(false);
@@ -66,9 +67,9 @@ export default function Table(game) {
     }
   };
 
-  const getFirstBuzzInQueue = (obj) => {
-    return obj[Object.keys(obj).reduce((oldest, key) =>
-        obj[key].timestamp < obj[oldest].timestamp ? key : oldest,
+  const getLastBuzzInQueue = (obj) => {
+    return obj[Object.keys(obj).reduce((newest, key) =>
+        obj[key].timestamp > obj[newest].timestamp ? key : newest,
       Object.keys(obj)[0])
       ].id;
   };
@@ -95,8 +96,7 @@ export default function Table(game) {
     if (isEmpty(game.G.queue)) {
       setSoundPlayed(false);
     } else if (loaded) {
-
-      playSound(getFirstBuzzInQueue(game.G.queue));
+      playSound(getLastBuzzInQueue(game.G.queue));
     }
 
     if (!loaded) {
@@ -127,7 +127,7 @@ export default function Table(game) {
     return () => window.removeEventListener('keydown', onKeydown);
   }, []);
 
-  const players = !game.gameMetadata
+  const playersTemp = !game.gameMetadata
     ? []
     : game.gameMetadata
         .filter((p) => p.name)
@@ -135,10 +135,12 @@ export default function Table(game) {
   // host is lowest active user
   const firstPlayer =
     get(
-      sortBy(players, (p) => parseInt(p.id, 10)).filter((p) => p.connected),
+      sortBy(playersTemp, (p) => parseInt(p.id, 10)).filter((p) => p.connected),
       '0'
     ) || null;
   const isHost = get(firstPlayer, 'id') === game.playerID;
+  const players = playersTemp.filter((p) => p.id !== get(firstPlayer, 'id'));
+
 
   const queue = sortBy(values(game.G.queue), ['timestamp']);
   const buzzedPlayers = queue
@@ -171,6 +173,9 @@ export default function Table(game) {
     return `+${delta} ms`;
   };
 
+  const spriteWidth = 284;
+  const spriteHeight = 203;
+
   return (
     <div>
       <Header
@@ -192,23 +197,45 @@ export default function Table(game) {
       />
       <Container>
         <section>
-          <p id="room-title">Room {game.gameID}</p>
+          {/*SHOULD REMOVE LATER*/}
+          {isHost ? <p id="room-title">Room {game.gameID}</p> : null}
+
           {!game.isConnected ? (
             <p className="warning">Disconnected - attempting to reconnect...</p>
           ) : null}
-          <div id="buzzer">
-            <button
+
+          {isHost ? (
+            <Scoreboard
+              style={{ width: '500px', height: '500px' }}
+              buzzedPlayers={buzzedPlayers}
+              activePlayers={activePlayers}
+            ></Scoreboard>
+          ) : null}
+
+          {isHost ? null : (
+            <div
+              id="buzzer"
               ref={buzzButton}
-              disabled={buzzed || game.G.locked}
+              style={{
+                width: spriteWidth,
+                height: spriteHeight,
+                overflow: 'hidden',
+                cursor: 'pointer',
+                backgroundImage: "url('/red-button-HD-sprite.png')", // Replace with actual sprite path
+                backgroundPosition:
+                  buzzed || game.G.locked ? `-${spriteWidth}px 0` : '0 0',
+                backgroundSize: `${spriteWidth * 2}px ${spriteHeight}px`,
+                margin: 'auto',
+                marginTop: '220px',
+              }}
               onClick={() => {
                 if (!buzzed && !game.G.locked) {
                   attemptBuzz();
                 }
               }}
-            >
-              {game.G.locked ? 'Locked' : buzzed ? 'Buzzed' : 'Buzz'}
-            </button>
-          </div>
+            />
+          )}
+
           {isHost ? (
             <div className="settings">
               <div className="button-container">
@@ -227,6 +254,17 @@ export default function Table(game) {
                   Reset all buzzers
                 </button>
               </div>
+
+              <div className="button-container">
+                <button
+                  style={{ marginTop: '30px' }}
+                  disabled={isEmpty(game.G.queue) || !soundPlayed}
+                  onClick={() => setSoundPlayed(false)}
+                >
+                  Reactivate buzzer sound
+                </button>
+              </div>
+
               <div className="divider" />
             </div>
           ) : null}
@@ -279,6 +317,9 @@ export default function Table(game) {
             ))}
           </ul>
         </div>
+
+        {/* SHOULD REMOVE LATER */}
+        {isHost ? null : <p>Room {game.gameID}</p>}
       </Container>
     </div>
   );
