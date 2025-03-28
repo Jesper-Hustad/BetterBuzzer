@@ -2,13 +2,23 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from 'react';
 
 export const modes = Object.freeze({
-    LIT: "mode-lit",
-    NORMAL: "mode-normal",
-    DARK: "mode-dark"
+  LIT: "mode-lit",
+  NORMAL: "mode-normal",
+  DARK: "mode-dark"
 });
 
 function PlayerName({ name, mode, buzzed }) {
   const [active, setActive] = useState(true);
+
+  const [topText, setTopText] = useState("");
+  const [bottomText, setBottomText] = useState("");
+
+  const [count, setCount] = useState(0);
+
+  function incrementCount(e, amount) {
+    setCount(count + amount);
+    e.stopPropagation();
+  }
 
   useEffect(() => {
     setActive(true);
@@ -39,7 +49,32 @@ function PlayerName({ name, mode, buzzed }) {
 
           <div className="metal-inner">
             <div className={"content " + (active ? mode : "mode-dark")}>
+
               <h1 className={"no-select"}>{name}</h1>
+
+              <div className="fake-number-container">
+                <h1 id="number" style={{ fontSize: 60 }}>{count}</h1>
+
+
+                <div className="button-overlay no-select" style={{ top: 0 }}
+                  onMouseOver={() => setTopText("▲")}
+                  onMouseOut={() => setTopText("")}
+                  onClick={(e) => incrementCount(e, 1)}
+                >
+                  {topText}
+                </div>
+
+
+                <div className="button-overlay no-select" style={{ bottom: 0 }}
+                  onMouseOver={() => setBottomText("▼")}
+                  onMouseOut={() => setBottomText("")}
+                  onClick={(e) => incrementCount(e, -1)}
+                >
+                  {bottomText}
+                </div>
+
+              </div>
+
             </div>
           </div>
         </div>
